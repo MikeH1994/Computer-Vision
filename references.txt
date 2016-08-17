@@ -1,0 +1,12 @@
+https://profs.sci.univr.it/~cristanm/teaching/sar_files/lezione4/Piccardi.pdf
+
+Running Gaussian Average
+mu_t =  alpha * I_t + (1-alpha)*mu_(t-1)
+sigma_t^2 = d^2*alpha + (1-alpha)sigma_(t-1)^2
+if |I_t - mu_t|/sigma_t > k ==> foreground
+if |I_t - mu_t|/sigma_t<=k  ==> background
+
+d = euclidean distance between mean and value = magnitude
+where mu_t is average at t, alpha is weight, I_t is pixel current value
+alpha = 0.01
+k = 2.5
