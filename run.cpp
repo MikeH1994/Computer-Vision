@@ -1,5 +1,6 @@
-#include "FrameGrabber.h"
+#include "ImageHandler.h"
+#include "Webcam.h"
 
 int main(){
-  FrameGrabber(640,480);
+  ImageHandler().run();
 }

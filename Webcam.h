@@ -1,66 +1,36 @@
-/** Small C++ wrapper around V4L example code to access the webcam
-**/
+#ifndef H_FRAMEGRABBER_H
+#define H_FRAMEGRABBER_H
 
+#include "V4L2Wrapper.h"
+#include <iostream>
+#include <fstream>
 #include <string>
-#include <memory> // unique_ptr
+#include <mutex>
+#include <thread>
+#include <ctime>
 
-struct buffer {
-      void   *data;
-      size_t  size;
-};
-
-struct RGBImage {
-      unsigned char   *data; // RGB888 <=> RGB24         
-      size_t          width;
-      size_t          height;
-      size_t          size; // width * height * 3
-};
-
-
-class Webcam {
-
-public:
-    Webcam(const std::string& device = "/dev/video0", 
-           int width = 640, 
-           int height = 480);
-
-    ~Webcam();
-
-    /** Captures and returns a frame from the webcam.
-     *
-     * The returned object contains a field 'data' with the image data in RGB888
-     * format (ie, RGB24), as well as 'width', 'height' and 'size' (equal to
-     * width * height * 3)
-     *
-     * This call blocks until a frame is available or until the provided
-     * timeout (in seconds). 
-     *
-     * Throws a runtime_error if the timeout is reached.
-     */
-    const RGBImage& frame(int timeout = 1);
+class Webcam{
 private:
-    void init_mmap();
-
-    void open_device();
-    void close_device();
-
-    void init_device();
-    void uninit_device();
-
-    void start_capturing();
-    void stop_capturing();
-    void convert_to_rgb();
-    bool read_frame();
-
-    std::string device;
-    int fd;
-
-    RGBImage rgb_frame;
-    struct buffer          *buffers;
-    unsigned int     n_buffers;
-
-    size_t xres, yres;
-    size_t stride;
-
-    bool force_format = true;
+  float _rWeight = 0.2126f;
+  float _gWeight = 0.7152f;
+  float _bWeight = 0.0722f;
+  int _width;
+  int _height;
+  long _size;
+  V4L2Wrapper* _wrapper;
+  std::recursive_mutex _webcamLock;
+  float getTimeDifference(std::clock_t start, std::clock_t end);
+  void copyArray(unsigned char* src,  unsigned char* dst, long size);
+public:
+  
+  Webcam(int width, int height);
+  ~Webcam();
+  void writeImageToFile(std::string path);
+  void writeImageToFile(const  unsigned char* data,long size,std::string path);
+  unsigned char* getPixelArrayFromWebcam();
+  unsigned char* getPixelArrayFromWebcam(unsigned char* pixelArray);
+  unsigned char* getImageFromWebcam();
+  unsigned char* getImageFromWebcam( unsigned char* copyTo);
+  void convertToGrayScale( unsigned char* data, long size);
 };
+#endif
