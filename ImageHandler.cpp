@@ -11,27 +11,51 @@ ImageHandler::ImageHandler(){
   _pixelValue = new unsigned char[_size];
   _pixelAverage = new float[_size];
   _pixelStandDev = new float[_size];
-  _pixelForeground = new float[_size];
+  _pixelForeground = new unsigned char[_size];
   initialFrame();
+  if (_autoUpdate){
+    _updateThread = std::thread(&ImageHandler::update,this);
+    _updateThread.detach();
+  }
+}
+
+void ImageHandler::update(){
+  int n = _nSecondsPerUpdate;
+  while(_autoUpdate){
+    //std::cout<<"Updating..."<<std::endl;
+    nextFrame();
+    std::this_thread::sleep_for(std::chrono::milliseconds(n*1000));
+  }
 }
 
 void ImageHandler::initialFrame(){
   /*
   set the initial frame values
   */
+  _pixelLock.lock();
   _pixelValue = _webcam->getPixelArrayFromWebcam(_pixelValue);
   for (long i = 0; i<_size; i++){
     _pixelAverage[i] = _pixelValue[i];
     _pixelStandDev[i] = 1;
   }
+  float tempAlpha = _alpha;
+  _alpha = 0.05f;
+  std::cout<<"Forming background image"<<std::endl;
+  for (int i = 0; i<_nInitialFramesToGenerateBackground; i++){
+    nextFrame();
+  }
+  _alpha = tempAlpha;
+  _pixelLock.unlock();
 }
 
 void ImageHandler::nextFrame(){
   /*
   get pixel averages & compute running gaussian averages, then compute background subtraction
   */
+  _pixelLock.lock();
   _pixelValue = _webcam->getPixelArrayFromWebcam(_pixelValue);
   float d;
+  int nForeground = 0;
   for (long i = 0; i<_size; i++){
     _pixelAverage[i] = _alpha*_pixelValue[i] + (1-_alpha)*_pixelAverage[i];
     d = abs(_pixelAverage[i]-_pixelValue[i]);
@@ -45,8 +69,13 @@ void ImageHandler::nextFrame(){
     else{
     //pixel is foreground
       _pixelForeground[i] = 250;
+      nForeground++;
     }
   }
+  if ((nForeground*1.0f/_size)>_foregroundCutoff){
+    
+  }
+  _pixelLock.unlock();
 }
 
 unsigned char* ImageHandler::convertPixelsToRGBFormat(unsigned char* array){
@@ -84,25 +113,14 @@ float ImageHandler::getPixel(int x, int y, float* array){
 }
 
 void ImageHandler::run(){
-  for (int i = 0; i<100;i++){
-    nextFrame();
-    if (i%5==0){
-      std::cout<<i<<"/100"<<std::endl;
-    }
+  std::string str = " ";
+  int number = 0;
+  std::string name;
+  while(str!="EXIT"){
+      std::cout<<"Enter 'EXIT' to quit"<<std::endl;
+      std::getline(std::cin,str);  
+      if (str=="EXIT"){
+        return;
+      }
   }
-  _webcam->writeImageToFile("images/before.ppm");
-  unsigned char* dataAverage = convertPixelsToRGBFormat(_pixelAverage);
-  std::cout<<"Press enter to take background subtraction"<<std::endl;
-  std::string str;
-  std::getline(std::cin,str);
-  //TODO =========>std::cin?
-  nextFrame();
-  _webcam->writeImageToFile("images/after.ppm");
-  unsigned char* dataForeground = convertPixelsToRGBFormat(_pixelForeground);
-  unsigned char* dataPixelValue = convertPixelsToRGBFormat(_pixelValue);
-  unsigned char* dataPixelAverage = convertPixelsToRGBFormat(_pixelAverage);
-  
-
-  _webcam->writeImageToFile(dataPixelAverage,_size*3,"images/average.ppm");
-  _webcam->writeImageToFile(dataForeground,_size*3,"images/foreground.ppm");
 }
