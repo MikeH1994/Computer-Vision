@@ -13,18 +13,14 @@ ImageHandler::ImageHandler(){
   _pixelStandDev = new float[_size];
   _pixelForeground = new unsigned char[_size];
   initialFrame();
-  if (_autoUpdate){
-    _updateThread = std::thread(&ImageHandler::update,this);
-    _updateThread.detach();
-  }
 }
 
 void ImageHandler::update(){
-  int n = _nSecondsPerUpdate;
+  float n = _nSecondsPerUpdate;
   while(_autoUpdate){
     //std::cout<<"Updating..."<<std::endl;
     nextFrame();
-    std::this_thread::sleep_for(std::chrono::milliseconds(n*1000));
+    std::this_thread::sleep_for(std::chrono::milliseconds( (int) (n*1000) ) );
   }
 }
 
@@ -122,6 +118,10 @@ float ImageHandler::getPixel(int x, int y, float* array){
 }
 
 void ImageHandler::run(){
+  if (_autoUpdate){
+    _updateThread = std::thread(&ImageHandler::update,this);
+    _updateThread.detach();
+  }
   std::string str = " ";
   int number = 0;
   std::string name;

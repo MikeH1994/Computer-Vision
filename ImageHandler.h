@@ -17,7 +17,7 @@ private:
   
   int _width = 640;
   int _height = 480;
-  int _nSecondsPerUpdate = 1;
+  float _nSecondsPerUpdate = 0.5;
   int _nInitialFramesToGenerateBackground = 15;
   long _size = _width*_height;
   float _alpha = 0.01f;
