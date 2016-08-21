@@ -31,6 +31,7 @@ private:
   void update();
   void nextFrame();
   void initialFrame();
+  void saveScreenGrab();
   unsigned char* convertPixelsToRGBFormat(unsigned char*);
   unsigned char* convertPixelsToRGBFormat(float*);
 public:

@@ -72,10 +72,19 @@ void ImageHandler::nextFrame(){
       nForeground++;
     }
   }
-  if ((nForeground*1.0f/_size)>_foregroundCutoff){
-    
+  if ((nForeground*1.0f/_size)>_foregroundCutoff)){
+	std::cout<<"Motion Detected at "<<currentDateTime().c_str()<<std:::endl;
+    saveScreenGrab();
   }
   _pixelLock.unlock();
+}
+
+void ImageHandler::saveScreenGrab(){
+	std::string time = currentDateTime();
+	std::string path = _outdir + "image_" + time + ".ppm";
+	writeImageToFile(_pixelValue,_width,_height,path);
+	path = _outdir + "foreground_" + time + ".ppm";
+	writeImageToFile(_pixelForeground,_width,_height,path);
 }
 
 unsigned char* ImageHandler::convertPixelsToRGBFormat(unsigned char* array){
