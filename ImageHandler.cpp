@@ -9,9 +9,11 @@ ImageHandler::ImageHandler(){
   std::cout<<"ImageHandler constructor"<<std::endl;
   _webcam = new Webcam(_width,_height);
   _pixelValue = new unsigned char[_size];
+  _pixelForeground = new unsigned char[_size];
+  _rgbTransferArray = new unsigned char[_size*3];
   _pixelAverage = new float[_size];
   _pixelStandDev = new float[_size];
-  _pixelForeground = new unsigned char[_size];
+
   initialFrame();
 }
 
@@ -32,7 +34,7 @@ void ImageHandler::initialFrame(){
   _pixelValue = _webcam->getPixelArrayFromWebcam(_pixelValue);
   for (long i = 0; i<_size; i++){
     _pixelAverage[i] = _pixelValue[i];
-    _pixelStandDev[i] = 1;
+    _pixelStandDev[i] = 1;//+ sqrt(_pixelValue[i]);
   }
   float tempAlpha = _alpha;
   _alpha = 0.05f;
@@ -41,6 +43,7 @@ void ImageHandler::initialFrame(){
     nextFrame();
   }
   _alpha = tempAlpha;
+  saveScreenGrab("original_");
   _pixelLock.unlock();
 }
 
@@ -68,39 +71,43 @@ void ImageHandler::nextFrame(){
       nForeground++;
     }
   }
-  if ((nForeground*1.0f/_size)>_foregroundCutoff)){
-	std::cout<<"Motion Detected at "<<currentDateTime().c_str()<<std:::endl;
-    saveScreenGrab();
+  if (_nFramesTaken>_nInitialFramesToGenerateBackground && nForeground*1.0f/_size>_foregroundCutoff){
+	  std::cout<<"Motion Detected at "<<currentDateTime().c_str()<<std::endl;
+    std::cout<<nForeground<<std::endl;
+    saveScreenGrab("image_");
   }
+  _nFramesTaken++;
   _pixelLock.unlock();
 }
 
-void ImageHandler::saveScreenGrab(){
+void ImageHandler::saveScreenGrab(std::string partName){
 	std::string time = currentDateTime();
-	std::string path = _outdir + "image_" + time + ".ppm";
-	writeImageToFile(_pixelValue,_width,_height,path);
+  std::replace(time.begin(),time.end(),':','_');
+	std::replace(time.begin(),time.end(),'.','_');
+  std::string path = _outdir + partName + time + ".ppm";
+	
+  
+  writeImageToFile(convertPixelsToRGBFormat(_pixelValue),_width,_height,path);
 	path = _outdir + "foreground_" + time + ".ppm";
-	writeImageToFile(_pixelForeground,_width,_height,path);
+	writeImageToFile(convertPixelsToRGBFormat(_pixelForeground),_width,_height,path);
 }
 
 unsigned char* ImageHandler::convertPixelsToRGBFormat(unsigned char* array){
-  unsigned char* data = new unsigned char[_size*3];
   for (long i = 0; i<_size; i++){
     for (int j = 0; j<3; j++){
-      data[i*3 + j] = array[i];
+      _rgbTransferArray[i*3 + j] = array[i];
     }
   }
-  return data;
+  return _rgbTransferArray;
 }
 
 unsigned char* ImageHandler::convertPixelsToRGBFormat(float* array){
-  unsigned char* data = new unsigned char[_size*3];
   for (long i = 0; i<_size; i++){
     for (int j = 0; j<3; j++){
-      data[i*3 + j] = (unsigned char) array[i];
+      _rgbTransferArray[i*3 + j] = (unsigned char) array[i];
     }
   }
-  return data;
+  return _rgbTransferArray;
 }
 
 unsigned char ImageHandler::getPixel(int x, int y){
@@ -117,11 +124,12 @@ float ImageHandler::getPixel(int x, int y, float* array){
   return array[index];
 }
 
-void ImageHandler::run(){
+void ImageHandler::runMotionTracking(){
   if (_autoUpdate){
     _updateThread = std::thread(&ImageHandler::update,this);
     _updateThread.detach();
   }
+  std::cout<<"alpha: "<<_alpha<<std::endl;
   std::string str = " ";
   int number = 0;
   std::string name;
@@ -129,7 +137,9 @@ void ImageHandler::run(){
       std::cout<<"Enter 'EXIT' to quit"<<std::endl;
       std::getline(std::cin,str);  
       if (str=="EXIT"){
+        _pixelLock.lock();
         return;
+        _pixelLock.unlock();
       }
   }
 }

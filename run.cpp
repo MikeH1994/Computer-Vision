@@ -2,5 +2,5 @@
 #include "Webcam.h"
 
 int main(){
-  ImageHandler().run();
+  ImageHandler().runMotionTracking();
 }
