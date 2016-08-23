@@ -17,16 +17,15 @@ private:
   float* _pixelAverage;
   float* _pixelStandDev;
 
-  
   int _nFramesTaken = 1;
   int _width = 640;
   int _height = 480;
-  float _nSecondsPerUpdate = 0.5;
-  int _nInitialFramesToGenerateBackground = 40;
-  long _size = _width*_height;
+  int _nInitialFramesToGenerateBackground = 30;
+  float _nSecondsPerUpdate = 1.0f;
+  long _size = _width*_height*3;
   float _alpha = 0.01f;
-  float _k = 3.2f;
-  float _foregroundCutoff = 0.08f;
+  float _k = 3.0f;
+  float _foregroundCutoff = 0.02f;
   std::string _outdir = "images/grab_";
   Webcam* _webcam;
   std::recursive_mutex _pixelLock;
@@ -36,14 +35,9 @@ private:
   void nextFrame();
   void initialFrame();
   void saveScreenGrab(std::string);
-  unsigned char* convertPixelsToRGBFormat(unsigned char*);
-  unsigned char* convertPixelsToRGBFormat(float*);
 public:
   ImageHandler();
   ~ImageHandler();
-  unsigned char getPixel(int,int);
-  void setPixel(int,int,unsigned char);
-  float getPixel(int,int, float*);
   void runMotionTracking();
 };
 #endif

@@ -14,7 +14,6 @@ protected:
   void writeImageToFile(const  unsigned char* data,int width, int height,std::string path);
   float getTimeDifference(std::clock_t start, std::clock_t end);
   void copyArray(unsigned char* src,  unsigned char* dst, long size);
-  void convertToGrayScale( unsigned char* data, long size);
   const std::string currentDateTime();
   
   

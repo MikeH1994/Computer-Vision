@@ -19,18 +19,6 @@ void Utils::copyArray(unsigned char* src,  unsigned char* dst, long size){
   }
 }
 
-void Utils::convertToGrayScale( unsigned char* data, long size){
-  float temp;
-  int iTemp;
-  for (long i = 0; i<size; i+=3){
-	  temp = _rWeight*(int) data[i] + _gWeight*(int)data[i+1]+ _bWeight*(int)data[i+2];
-	  iTemp = (int) temp;
-	  for (int j = 0; j<3;j++){
-		data[i+j] = (unsigned char) iTemp;  
-	  }
-  }	  
-}
-
 const std::string Utils::currentDateTime() {
     time_t     now = time(0);
     struct tm  tstruct;
