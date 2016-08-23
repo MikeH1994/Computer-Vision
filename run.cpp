@@ -1,6 +1,5 @@
-#include "ImageHandler.h"
-#include "Webcam.h"
+#include "background_subtraction/BackgroundSubtraction.h"
 
 int main(){
-  ImageHandler().runMotionTracking();
+  BackgroundSubtraction().runMotionTracking();
 }

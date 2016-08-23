@@ -17,12 +17,12 @@ private:
   unsigned char* _transferArray;
   V4L2Wrapper* _wrapper;
   std::recursive_mutex _webcamLock;
-  unsigned char* getArrayFromWebcam();
 public:
   Webcam(int width, int height);
   ~Webcam();
   void saveImage(std::string path);
   unsigned char* getArrayFromWebcam(unsigned char* copyTo);
   unsigned char* getGrayscaleArrayFromWebcam(unsigned char* pixelArray);
+  unsigned char* getArrayFromWebcam();
 };
 #endif
