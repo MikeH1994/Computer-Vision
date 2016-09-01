@@ -17,18 +17,19 @@ protected:
   int _height = 480;
   long _size = _width*_height*3;
   float _nSecondsPerUpdate = 0.5f;
-  std::string _outdir = "../images/grab_";
+  std::string _outdir = "images/grab_";
   Webcam* _webcam;
   std::recursive_mutex _pixelLock;
   std::thread _updateThread;
   void update();
   void nextFrame();
   void initialise();
-  // overwrittenFunctions
+  //======================
+  // overwritten functions
   virtual void processNextFrame() = 0;
   virtual void initialFrame() = 0;
   virtual void saveScreenGrab(std::string) = 0;  
-  //
+  //======================
 public:
   ImageHandler();
   ~ImageHandler();

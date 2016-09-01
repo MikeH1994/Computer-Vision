@@ -19,7 +19,7 @@ void ImageHandler::update(){
 
 void ImageHandler::nextFrame(){
   /*
-  get pixel averages & compute running gaussian averages, then compute background subtraction
+  update the _pixelValue array with new values from webcam
   */
   _pixelLock.lock();
   _pixelValue = _webcam->getArrayFromWebcam();

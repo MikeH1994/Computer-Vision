@@ -1,5 +1,6 @@
 #include "Utils.h"
 
+
 void Utils::writeImageToFile(const  unsigned char* data,int width, int height,std::string path){
   long size = width*height*3;
   std::ofstream image;
