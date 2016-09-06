@@ -6,6 +6,7 @@ https://github.com/severin-lemaignan/webcam-v4l2
 
 #Background Subtraction:
 Using Running Guassian Average
+
 ![Original](https://s17.postimg.io/tjonocde7/final_original.jpg)
 
 ![Movement Detected](https://s17.postimg.io/n4pmro6of/final_image.jpg)
