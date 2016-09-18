@@ -1,6 +1,6 @@
 all:
 	g++ -std=c++11 \
   run.cpp \
-  core/V4L2Wrapper.cpp core/Webcam.cpp core/ImageHandler.cpp core/Utils.cpp \
-  background_subtraction/BackgroundSubtraction.cpp \
-  -o run -lpthread
+  src/V4L2Wrapper.cpp src/Webcam.cpp src/ImageHandler.cpp src/Utils.cpp \
+  src/BackgroundSubtraction.cpp \
+  -o run -O2 -L/usr/X11R6/lib -lm -lpthread -lX11

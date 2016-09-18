@@ -1,4 +1,4 @@
-#include "background_subtraction/BackgroundSubtraction.h"
+#include "include/BackgroundSubtraction.h"
 
 int main(){
   BackgroundSubtraction().runMotionTracking();
