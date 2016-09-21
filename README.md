@@ -1,7 +1,8 @@
 # Computer-Vision
 Basic computer vision project on Linux.
 Uses Video4Linux2 C++ wrapper from Severin Lemaignan at
-https://github.com/severin-lemaignan/webcam-v4l2 & CImg http://cimg.eu/reference/index.html
+https://github.com/severin-lemaignan/webcam-v4l2 (renamed to V4L2 wrapper here)
+& CImg http://cimg.eu/reference/index.html
 
 #Background Subtraction:
 Using Running Guassian Average
