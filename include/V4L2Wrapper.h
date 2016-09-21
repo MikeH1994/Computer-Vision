@@ -20,9 +20,7 @@ struct RGBImage {
 class V4L2Wrapper {
 
 public:
-    V4L2Wrapper(const std::string& device = "/dev/video0", 
-           int width = 640, 
-           int height = 480);
+    V4L2Wrapper(const std::string& device,int width,int height);
 
     ~V4L2Wrapper();
 
