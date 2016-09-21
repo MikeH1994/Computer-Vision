@@ -9,8 +9,8 @@ https://github.com/severin-lemaignan/webcam-v4l2 (renamed to V4L2 wrapper here)
 Background Subtraction using running Gaussian Average and mean spatial filtering
 
 ![Original](images/img0.jpg.jpg?raw=true "Title")
-![Movement Detected](images/image1b.jpg.jpg?raw=true "Title")
-![Movement Foreground](images/image1a.jpg.jpg?raw=true "Title")
-![Movement Detected](images/image2b.jpg.jpg?raw=true "Title")
-![Movement Foreground](images/image2a.jpg.jpg?raw=true "Title")
+![Movement Detected](images/image1b.jpg?raw=true "Title")
+![Movement Foreground](images/image1a.jpg?raw=true "Title")
+![Movement Detected](images/image2b.jpg?raw=true "Title")
+![Movement Foreground](images/image2a.jpg?raw=true "Title")
 
