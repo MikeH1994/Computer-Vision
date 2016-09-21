@@ -8,6 +8,10 @@ BackgroundSubtraction::BackgroundSubtraction():ImageHandler(){
     _imageForegroundDisplay = new cimg_library::CImgDisplay(*_imageForeground,
      "Cam_001 Motion");
   _imageForegroundDisplay->show();
+  _boundingBoxTopLeft.first = 0;
+  _boundingBoxTopLeft.second = 0;
+  _boundingBoxBottomRight.first = 0;
+  _boundingBoxBottomRight.second = 0;
   initialFrame();
 }
 
@@ -19,25 +23,11 @@ BackgroundSubtraction::~BackgroundSubtraction(){
   delete _imageForegroundDisplay;
 }
 
-void BackgroundSubtraction::runMotionTracking(){
-	/*
-	runs motion tracking. Creates a thread to continously call on 'nextFrame()'
-	*/
-  _autoUpdate = true;
-  _updateThread = std::thread(&BackgroundSubtraction::update,this);
-  _updateThread.detach();
-  
-  while(!_imageDisplay->is_closed() && !_imageForegroundDisplay->is_closed()){
-		std::this_thread::sleep_for(std::chrono::milliseconds( 100 ) );
-	}
-	_pixelLock.lock();
-  return;
-}
-
 void BackgroundSubtraction::updateImageDisplay(){
 	//updates the CImg windows displaying camera output
 	int x;
 	int y;
+	
 	for(long i = 0; i<_width*_height; i+=1){
 		x = i%_width;
 		y = i/_width;
@@ -58,7 +48,7 @@ void BackgroundSubtraction::saveScreenGrab(std::string partName){
   std::string path = _outdir + "/grab_" + partName + time + ".ppm";
   std::cout<<"Image written to "<<path<<std::endl;
   writeImageToFile(_pixelValue,_width,_height,path);
-  path = _outdir + partName + time + "_foreground.ppm";
+  path = _outdir + "/grab_" + partName + time + "_foreground.ppm";
   writeImageToFile(_pixelForeground,_width,_height,path);
 }
 
@@ -115,7 +105,7 @@ void BackgroundSubtraction::processNextFrame(){
   	 //check if the pixel is moving
      checkPixelForMovement(dist,i,nForeground);
   }
-  
+
   if (_nFramesTaken>_nInitialFramesToGenerateBackground && 
   				nForeground*1.0f/(_width*_height)>_foregroundCutoff){
   				
@@ -140,7 +130,7 @@ void BackgroundSubtraction::initialFrame(){
     _pixelStandDev[i] = 2; 
   }
   float tempAlpha = _alpha;
-  _alpha = 0.05f;
+  _alpha = 1.f/_nInitialFramesToGenerateBackground;
   std::cout<<"Forming background image..."<<std::endl;
   for (int i = 0; i<_nInitialFramesToGenerateBackground; i++){
     nextFrame();

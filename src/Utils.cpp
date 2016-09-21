@@ -41,3 +41,4 @@ bool Utils::directoryExists(std::string filepath){
     else
         return 0;
 }
+
