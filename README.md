@@ -1,15 +1,16 @@
 # Computer-Vision
-Basic computer vision project on Linux.
+Attemp at some fairly basic video processing & computer vision stuff on Linux.
+
 Uses Video4Linux2 C++ wrapper from Severin Lemaignan at
 https://github.com/severin-lemaignan/webcam-v4l2 (renamed to V4L2 wrapper here)
 & CImg http://cimg.eu/reference/index.html
 
 #Background Subtraction:
-Using Running Guassian Average
+Background Subtraction using running Gaussian Average and mean spatial filtering
 
-![Original](https://s17.postimg.io/tjonocde7/final_original.jpg)
-
-![Movement Detected](https://s17.postimg.io/n4pmro6of/final_image.jpg)
-
-![Movement Foreground](https://s17.postimg.io/5q5eje9jj/final_foreground.jpg)
+![Original](images/img0.jpg.jpg?raw=true "Title")
+![Movement Detected](images/image1b.jpg.jpg?raw=true "Title")
+![Movement Foreground](images/image1a.jpg.jpg?raw=true "Title")
+![Movement Detected](images/image2b.jpg.jpg?raw=true "Title")
+![Movement Foreground](images/image2a.jpg.jpg?raw=true "Title")
 
