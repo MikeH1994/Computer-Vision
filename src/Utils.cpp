@@ -42,3 +42,46 @@ bool Utils::directoryExists(std::string filepath){
         return 0;
 }
 
+
+void Utils::heapSort(unsigned char* array, int arraySize) {
+  int i, temp;
+
+  for (i = (arraySize / 2)-1; i >= 0; i--)
+    siftDown(array, i, arraySize);
+
+  for (i = arraySize-1; i >= 1; i--)
+  {
+    temp = array[0];
+    array[0] = array[i];
+    array[i] = temp;
+    siftDown(array, 0, i-1);
+  }
+}
+
+
+void Utils::siftDown(unsigned char* array,int root, int bottom){
+  int done, maxChild, temp;
+
+  done = 0;
+  while ((root*2 <= bottom) && (!done))
+  {
+    if (root*2 == bottom)
+      maxChild = root * 2;
+    else if (array[root * 2] > array[root * 2 + 1])
+      maxChild = root * 2;
+    else
+      maxChild = root * 2 + 1;
+
+    if (array[root] < array[maxChild])
+    {
+      temp = array[root];
+      array[root] = array[maxChild];
+      array[maxChild] = temp;
+      root = maxChild;
+    }
+    else
+      done = 1;
+  }
+}
+
+

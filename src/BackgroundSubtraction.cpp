@@ -52,7 +52,7 @@ void BackgroundSubtraction::saveScreenGrab(std::string partName){
   writeImageToFile(_pixelForeground,_width,_height,path);
 }
 
-void BackgroundSubtraction::checkPixelForMovement(float dist, long pixelIndex,long &nForeground){ 
+void BackgroundSubtraction::checkPixelForMovement(float &dist, long &pixelIndex,long &nForeground){ 
   /*
   for a given pixel, check if movement has been detected, if so set the value of
   corresponding element in _pixelForeground 
@@ -131,6 +131,7 @@ void BackgroundSubtraction::initialFrame(){
   }
   float tempAlpha = _alpha;
   _alpha = 1.f/_nInitialFramesToGenerateBackground;
+  std::cout<<"Use filters: "<<_applyFilter<<std::endl;
   std::cout<<"Forming background image..."<<std::endl;
   for (int i = 0; i<_nInitialFramesToGenerateBackground; i++){
     nextFrame();
