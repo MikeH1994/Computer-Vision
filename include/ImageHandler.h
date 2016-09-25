@@ -13,8 +13,8 @@
 class ImageHandler:public Utils{
 protected:
   bool _autoUpdate = true;
-  bool _applyFilter = false;
-  bool _saveGrabs = true;
+  bool _applyFilter = true;
+  bool _saveGrabs = false;
   unsigned char* _pixelValue;
   int _nFramesTaken = 1;
   int _width = 640;

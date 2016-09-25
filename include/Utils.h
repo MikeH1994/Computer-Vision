@@ -16,8 +16,13 @@ protected:
   void writeImageToFile(const  unsigned char* data,int width, int height,std::string path);
   float getTimeDifference(std::clock_t start, std::clock_t end);
   void copyArray(unsigned char* src,  unsigned char* dst, long size);
+  void heapSort(unsigned char* array, int n);
+  void siftDown(unsigned char*, int root, int bottom);
   const std::string currentDateTime();
   bool directoryExists(std::string filepath);
+
+
+	
 };
 
 #endif

@@ -17,10 +17,7 @@ protected:
   float _k = 2.5f;
   float _foregroundCutoff = 0.09f;
   int _nInitialFramesToGenerateBackground = 50;
-  
-  void checkPixelForMovement(float dist,long pixelIndex, long &nForeground);
-  void setPixelAverageAndSD(long pixelIndex,float dist, long &nForeground);
-  void cleanForegroundImage();
+  void checkPixelForMovement(float &dist,long &pixelIndex, long &nForeground);
   void processNextFrame() override;
   void initialFrame() override;
   void updateImageDisplay() override;
